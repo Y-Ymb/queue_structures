@@ -8,21 +8,24 @@ namespace queue_structures {
 
 
 typedef struct cell_t {
-  uint32_t rank = -1;
-  uint32_t gap = -1;
+  int rank;
+  int gap;
   uint64_t data;
+
+  cell_t(): rank(-1), gap(-1) {}
+  ~cell_t() {}
 } cell_t;
 
 typedef struct rank_gap_pair {
  public:
-    std::atomic<uint32_t> rank;
-    std::atomic<uint32_t> gap;
+    std::atomic<int> rank;
+    std::atomic<int> gap;
 
     rank_gap_pair(): rank(-1), gap(-1) {}
     ~rank_gap_pair() {}
 
-    bool double_compare_and_swap(uint32_t expected_rank, uint32_t new_rank,
-                                 uint32_t expected_gap, uint32_t new_gap) {
+    bool double_compare_and_swap(int expected_rank, int new_rank,
+                                 int expected_gap, int new_gap) {
       bool success_rank = rank.compare_exchange_strong(expected_rank, new_rank);
       bool success_gap = gap.compare_exchange_strong(expected_gap, new_gap);
       return (success_rank & success_gap);
@@ -134,3 +137,8 @@ class mpmc_ffq {
 
 
 }  //  namespace queue_structures
+
+int main() {
+  std::cout << "sample program" << std::endl;
+  return 1;
+}
